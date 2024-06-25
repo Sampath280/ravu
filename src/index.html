@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Functions HTTP Trigger Example</title>
+</head>
+<body>
+    <h1>Azure Functions HTTP Trigger Example</h1>
+    
+    <form id="nameForm">
+        <label for="nameInput">Enter your name:</label>
+        <input type="text" id="nameInput" name="name">
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const form = document.querySelector('#nameForm');
+        const userInput = document.querySelector('#nameInput');
+        const result = document.querySelector('#result');
+
+        // Function to handle GET request separately
+        async function handleGetRequest() {
+            try {
+                const response = await fetch(`http://localhost:7071/api/httpTrigger1?name=${userInput.value}`, {
+                    method: 'GET',
+                    mode: 'cors' // Ensure CORS mode is set to fetch properly
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.text(); // Read response as plain text
+                result.innerHTML = data; // Update the result div with the response text
+            } catch (error) {
+                result.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Immediately invoke the GET request function
+        handleGetRequest();
+    </script>
+</body>
+</html>
